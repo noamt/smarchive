@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.apache.commons:commons-compress:1.10'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+}
