@@ -39,8 +39,7 @@ class SmarchiveInputStreamSpec extends Specification {
         def rawFileStream = new FileInputStream(tempFile.toFile())
 
         when:
-        def smarchive = new SmarchiveInputStream(rawFileStream)
-        smarchive.realize()
+        def smarchive = SmarchiveInputStream.realize(rawFileStream)
 
         then:
         smarchive.actual instanceof TarArchiveInputStream
@@ -67,8 +66,7 @@ class SmarchiveInputStreamSpec extends Specification {
         def rawFileStream = new FileInputStream(tempFile.toFile())
 
         when:
-        def smarchive = new SmarchiveInputStream(rawFileStream)
-        smarchive.realize()
+        def smarchive = SmarchiveInputStream.realize(rawFileStream)
 
         then:
         smarchive.actual instanceof TarArchiveInputStream
@@ -95,8 +93,7 @@ class SmarchiveInputStreamSpec extends Specification {
         def rawFileStream = new FileInputStream(tempFile.toFile())
 
         when:
-        def smarchive = new SmarchiveInputStream(rawFileStream)
-        smarchive.realize()
+        def smarchive = SmarchiveInputStream.realize(rawFileStream)
 
         then:
         smarchive.actual instanceof ZipArchiveInputStream

@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 
 /**
+ * The Smart Archive.
+ * Back by commons-compress, the smart archive detects and acts as specific archive stream
+ *
  * @author Noam Y. Tenne
  */
 public class SmarchiveInputStream extends ArchiveInputStream {
@@ -19,11 +22,29 @@ public class SmarchiveInputStream extends ArchiveInputStream {
     private InputStream is;
     private ArchiveInputStream actual;
 
-    public SmarchiveInputStream(InputStream is) {
+    private SmarchiveInputStream(InputStream is) {
         this.is = is;
     }
 
-    public void realize() throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
+    /**
+     * The Main entry point for creating a smart archive
+     *
+     * @param is The stream with the unknown archive type
+     * @return A Smart Archive stream that will serve entries according to the detected type
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws IOException
+     */
+    public static SmarchiveInputStream realize(InputStream is) throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException, IOException {
+        SmarchiveInputStream smarchiveInputStream = new SmarchiveInputStream(is);
+        smarchiveInputStream.realize();
+        return smarchiveInputStream;
+    }
+
+    private void realize() throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
             IllegalAccessException {
         BufferedInputStream originalStream = new BufferedInputStream(is);
         originalStream = addGzFilterIfNeeded(originalStream);
