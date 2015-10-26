@@ -1,0 +1,4 @@
+language: java
+after_success: ./gradlew artifactoryPublish
+jdk:
+  - oraclejdk7
