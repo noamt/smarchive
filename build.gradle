@@ -12,8 +12,8 @@ buildscript {
 
 apply plugin: 'idea'
 apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'com.jfrog.artifactory-upload'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
 
 repositories {
     jcenter()
@@ -31,20 +31,29 @@ task sourceJar(type: Jar) {
 }
 
 artifacts {
-    archives jar
-    archives sourceJar
+    archives jar, sourceJar
 }
 
-install {
-    configuration = configurations.archives
+publishing {
+    publications {
+        dist(MavenPublication) {
+            from components.java
+            artifact sourceJar {
+                classifier 'source'
+            }
+        }
+    }
 }
 
 artifactory {
     contextUrl = 'https://oss.jfrog.org/artifactory'
     publish {
         repoKey = 'oss-snapshot-local'
-        username = System.getenv('artifactory_user')
-        password = System.getenv('artifactory_password')
+        username = System.getenv('ARTIFACTORY_USER')
+        password = System.getenv('ARTIFACTORY_PASSWORD')
+        defaults {
+            publications('dist')
+        }
     }
 }
 
