@@ -1,4 +1,8 @@
+apply plugin: 'idea'
 apply plugin: 'java'
+
+group = 'org.10ne'
+version = projectVersion
 
 repositories {
     jcenter()
@@ -8,4 +12,23 @@ dependencies {
     compile 'org.apache.commons:commons-compress:1.10'
     compile 'org.slf4j:slf4j-api:1.7.12'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+}
+
+idea {
+    project {
+        jdkName = '1.7'
+        languageLevel = '1.7'
+        wildcards += '?*.gradle;?*.js'
+        ipr {
+            withXml { provider ->
+                def node = provider.asNode()
+                // Use git
+                def vcsConfig = node.component.find { it.'@name' == 'VcsDirectoryMappings' }
+                vcsConfig.mapping[0].'@vcs' = 'Git'
+            }
+        }
+    }
+    module {
+        downloadSources = true
+    }
 }
