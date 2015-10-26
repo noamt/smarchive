@@ -1,8 +1,19 @@
-apply plugin: 'idea'
-apply plugin: 'java'
-
 group = 'org.10ne'
 version = projectVersion
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath(group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '3.1.0')
+    }
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.jfrog.artifactory-upload'
 
 repositories {
     jcenter()
@@ -12,6 +23,29 @@ dependencies {
     compile 'org.apache.commons:commons-compress:1.10'
     compile 'org.slf4j:slf4j-api:1.7.12'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+}
+
+install {
+    configuration = configurations.archives
+}
+
+artifactory {
+    contextUrl = 'https://oss.jfrog.org/artifactory'
+    publish {
+        repoKey = 'oss-snapshot-local'
+        username = System.getenv('artifactory_user')
+        password = System.getenv('artifactory_password')
+    }
 }
 
 idea {
