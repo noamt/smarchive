@@ -1,5 +1,6 @@
 package org._10ne.smarchive
 
+import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream
@@ -25,13 +26,8 @@ class SmarchiveInputStreamSpec extends Specification {
             gzStream.withStream { OutputStream gzOutStream ->
                 def tarStream = new TarArchiveOutputStream(gzOutStream)
                 tarStream.withStream { TarArchiveOutputStream tarOutStream ->
-                    def entryFile = tempEntryFile()
                     def archiveEntry = new TarArchiveEntry('testentry')
-                    archiveEntry.setSize(entryFile.size())
-                    tarOutStream.putArchiveEntry(archiveEntry);
-                    tarOutStream.write(entryFile.bytes)
-                    tarOutStream.closeArchiveEntry()
-                    tarOutStream.finish()
+                    putEntry(archiveEntry, tarOutStream)
                 }
                 gzStream.finish()
             }
@@ -43,6 +39,7 @@ class SmarchiveInputStreamSpec extends Specification {
 
         then:
         smarchive.actual instanceof TarArchiveInputStream
+        archiveEntryIsValid(smarchive)
 
         cleanup:
         rawFileStream.close()
@@ -54,13 +51,8 @@ class SmarchiveInputStreamSpec extends Specification {
         tempFile.withDataOutputStream { OutputStream tempFileStream ->
             def tarStream = new TarArchiveOutputStream(tempFileStream)
             tarStream.withStream { TarArchiveOutputStream tarOutStream ->
-                def entryFile = tempEntryFile()
                 def archiveEntry = new TarArchiveEntry('testentry')
-                archiveEntry.setSize(entryFile.size())
-                tarOutStream.putArchiveEntry(archiveEntry);
-                tarOutStream.write(entryFile.bytes)
-                tarOutStream.closeArchiveEntry()
-                tarOutStream.finish()
+                putEntry(archiveEntry, tarOutStream)
             }
         }
         def rawFileStream = new FileInputStream(tempFile.toFile())
@@ -70,6 +62,7 @@ class SmarchiveInputStreamSpec extends Specification {
 
         then:
         smarchive.actual instanceof TarArchiveInputStream
+        archiveEntryIsValid(smarchive)
 
         cleanup:
         rawFileStream.close()
@@ -81,13 +74,8 @@ class SmarchiveInputStreamSpec extends Specification {
         tempFile.withDataOutputStream { OutputStream tempFileStream ->
             def zipStream = new ZipArchiveOutputStream(tempFileStream)
             zipStream.withStream { ZipArchiveOutputStream zipOutStream ->
-                def entryFile = tempEntryFile()
                 def archiveEntry = new ZipArchiveEntry('testentry')
-                archiveEntry.setSize(entryFile.size())
-                zipOutStream.putArchiveEntry(archiveEntry);
-                zipOutStream.write(entryFile.bytes)
-                zipOutStream.closeArchiveEntry()
-                zipOutStream.finish()
+                putEntry(archiveEntry, zipOutStream)
             }
         }
         def rawFileStream = new FileInputStream(tempFile.toFile())
@@ -97,9 +85,20 @@ class SmarchiveInputStreamSpec extends Specification {
 
         then:
         smarchive.actual instanceof ZipArchiveInputStream
+        archiveEntryIsValid(smarchive)
 
         cleanup:
         rawFileStream.close()
+    }
+
+    private void archiveEntryIsValid(ArchiveInputStream smarchive) {
+        def entry = smarchive.nextEntry
+        assert entry.name == 'testentry'
+        assert smarchive.canReadEntryData(entry)
+
+        byte[] entryContent = [0, 0, 0, 0] as byte[]
+        smarchive.read(entryContent)
+        assert new String(entryContent) == 'test'
     }
 
     private Path tempEntryFile() {
@@ -108,5 +107,14 @@ class SmarchiveInputStreamSpec extends Specification {
             it << 'test'
         }
         file
+    }
+
+    private void putEntry(def archiveEntry, def outStream) {
+        Path entryFile = tempEntryFile()
+        archiveEntry.setSize(entryFile.size())
+        outStream.putArchiveEntry(archiveEntry);
+        outStream.write(entryFile.bytes)
+        outStream.closeArchiveEntry()
+        outStream.finish()
     }
 }

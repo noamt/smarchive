@@ -13,7 +13,7 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * The Smart Archive.
- * Back by commons-compress, the smart archive detects and acts as specific archive stream
+ * Backed by commons-compress, the smart archive detects and acts as specific archive stream
  *
  * @author Noam Y. Tenne
  */
@@ -37,7 +37,7 @@ public class SmarchiveInputStream extends ArchiveInputStream {
      * @throws IllegalAccessException
      * @throws IOException
      */
-    public static SmarchiveInputStream realize(InputStream is) throws InvocationTargetException, NoSuchMethodException,
+    public static ArchiveInputStream realize(InputStream is) throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException, IOException {
         SmarchiveInputStream smarchiveInputStream = new SmarchiveInputStream(is);
         smarchiveInputStream.realize();
