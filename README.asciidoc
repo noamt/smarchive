@@ -1,0 +1,27 @@
+= Smarchive - The Smart Archive =
+
+== Backed by commons-compress, the Smart Archive detects and acts as specific archive stream ==
+
+=== Abstract ===
+
+At times you might have to handle an archive input stream but you will have no prior knowledge of the archiving method.
+
+Based on the magic headers, the Smart Archive will auto-detect the archiving method and apply it accordingly.
+
+Currently the support types are `tar`, `ar` and `zip`.
+The Smart Archive will also apply a `GZip` filter if needed.
+
+=== Usage ===
+
+Usage is simple. To create a Smart Archive instance:
+[source,java]
+----
+import org._10ne.smarchive.SmarchiveInputStream
+
+...
+
+public void readArchiveEntries(InputStream inputStream) {
+    ArchiveInputStream archiveStream = SmarchiveInputStream.realize(inputStream);
+    ...
+}
+----
