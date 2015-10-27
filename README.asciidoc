@@ -2,6 +2,8 @@
 
 == Backed by commons-compress, the Smart Archive detects and acts as specific archive stream ==
 
+image:https://travis-ci.org/noamt/smarchive.svg?branch=master["Build Status", link="https://travis-ci.org/noamt/smarchive"]
+
 === Abstract ===
 
 At times you might have to handle an archive input stream but you will have no prior knowledge of the archiving method.
