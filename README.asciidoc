@@ -4,6 +4,8 @@
 
 image:https://travis-ci.org/noamt/smarchive.svg?branch=master["Build Status", link="https://travis-ci.org/noamt/smarchive"]
 
+image:https://api.bintray.com/packages/noamt/java-libraries/smarchive/images/download.svg[link="https://bintray.com/noamt/java-libraries/smarchive/_latestVersion"]
+
 === Abstract ===
 
 At times you might have to handle an archive input stream but you will have no prior knowledge of the archiving method.
