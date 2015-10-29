@@ -13,6 +13,24 @@ Based on the magic headers, the Smart Archive will auto-detect the archiving met
 Currently the support types are `tar`, `ar` and `zip`.
 The Smart Archive will also apply a `GZip` filter if needed.
 
+=== Installation ===
+
+If you haven't already done so, add JCenter to your repositories:
+[source,groovy]
+----
+repositories {
+    jcenter()
+}
+----
+
+Then add the dependency to compile time:
+[source,groovy]
+----
+dependencies {
+    compile 'org.10ne:smarchive:0.1'
+}
+----
+
 === Usage ===
 
 Usage is simple. To create a Smart Archive instance:
