@@ -1,6 +1,6 @@
 = Smarchive - The Smart Archive =
 
-== Backed by link:https://commons.apache.org/proper/commons-compress/[commons-compress], the Smart Archive detects and acts as specific archive stream ==
+== Backed by link:https://commons.apache.org/proper/commons-compress/[commons-compress], the Smart Archive detects and morphs into a specific archive stream ==
 
 image:https://travis-ci.org/noamt/smarchive.svg?branch=master["Build Status", link="https://travis-ci.org/noamt/smarchive"]
 
